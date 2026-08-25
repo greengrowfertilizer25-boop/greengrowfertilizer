@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { X, Check, ShoppingBag, ShieldCheck, Mail, Send, CheckCircle2 } from "lucide-react";
 import { Product } from "@/data/products";
+import { createResource } from "@/lib/client/api";
 
 interface ProductModalProps {
   product: Product | null;
@@ -30,13 +31,15 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate sending email / webhook
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await createResource("enquiries", {
+        ...formData,
+        productName: product?.name,
+      });
       setSubmitted(true);
       setFormData({
         fullName: "",
@@ -47,7 +50,11 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
         enquiryType: "Customer Inquiry",
         message: ""
       });
-    }, 1500);
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Unable to send enquiry.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

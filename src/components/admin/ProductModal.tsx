@@ -18,6 +18,9 @@ export interface ProductFormData {
     stock: number;
     image: string;
     isSoldOut: boolean;
+    benefits: string;
+    recommendedUsage: string;
+    packagingDetails: string;
 }
 
 const emptyForm: ProductFormData = {
@@ -32,6 +35,9 @@ const emptyForm: ProductFormData = {
     stock: 0,
     image: "",
     isSoldOut: false,
+    benefits: "",
+    recommendedUsage: "",
+    packagingDetails: "",
 };
 
 const categories = [
@@ -240,6 +246,35 @@ function ProductModalContent({
                                 value={form.composition}
                                 onChange={(e) => update("composition", e.target.value)}
                                 placeholder="e.g. Humic Acid: 80%, Fulvic Acid: 18%"
+                                className={inputCls}
+                            />
+                        </Field>
+
+                        <Field label="Key Crop Benefits" full>
+                            <textarea
+                                rows={2}
+                                value={form.benefits}
+                                onChange={(e) => update("benefits", e.target.value)}
+                                placeholder="Comma separated, e.g. Accelerates root development, Improves soil structure"
+                                className={`${inputCls} resize-none`}
+                            />
+                        </Field>
+
+                        <Field label="Recommended Usage & Dosage" full>
+                            <textarea
+                                rows={2}
+                                value={form.recommendedUsage}
+                                onChange={(e) => update("recommendedUsage", e.target.value)}
+                                placeholder="e.g. Soil Application: 2-3 kg per acre."
+                                className={`${inputCls} resize-none`}
+                            />
+                        </Field>
+
+                        <Field label="Available Packaging Sizes" full>
+                            <input
+                                value={form.packagingDetails}
+                                onChange={(e) => update("packagingDetails", e.target.value)}
+                                placeholder="Comma separated, e.g. 1 KG, 5 KG, 25 KG DRUM"
                                 className={inputCls}
                             />
                         </Field>

@@ -29,6 +29,9 @@ const toRow = (p: Product & { stock?: number }): RowProduct => ({
     isSoldOut: p.isSoldOut ?? false,
     rating: p.rating,
     reviews: p.reviews,
+    benefits: Array.isArray(p.benefits) ? p.benefits.join(", ") : "",
+    recommendedUsage: p.recommendedUsage || "",
+    packagingDetails: Array.isArray(p.packagingDetails) ? p.packagingDetails.join(", ") : "",
 });
 
 export default function AdminProductsPage() {
@@ -80,12 +83,13 @@ export default function AdminProductsPage() {
 
     const handleSave = async (data: ProductFormData) => {
         try {
+            const { benefits, packagingDetails, ...restData } = data;
             const payload = {
-                ...data,
+                ...restData,
                 id: editing?.uid || data.id || `product-${Date.now()}`,
-                benefits: editing ? undefined : [],
-                recommendedUsage: editing ? undefined : "",
-                packagingDetails: editing ? undefined : [],
+                benefits: benefits ? benefits.split(",").map(s => s.trim()).filter(Boolean) : [],
+                recommendedUsage: data.recommendedUsage || "",
+                packagingDetails: packagingDetails ? packagingDetails.split(",").map(s => s.trim()).filter(Boolean) : [],
                 rating: editing?.rating ?? 0,
                 reviews: editing?.reviews ?? 0,
             };
