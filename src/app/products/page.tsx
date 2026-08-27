@@ -121,7 +121,15 @@ function ProductsCatalog({
 
       {/* 3. Product Catalog Grid (2 columns on mobile, 4 columns on desktop) */}
       <main className="w-full">
-        {filteredProducts.length === 0 ? (
+        {["Pesticides", "Fungicides", "Herbicides", "Combos"].includes(selectedCategory) ? (
+          <div className="bg-white border border-stone-200/50 rounded-3xl p-10 sm:p-16 text-center shadow-sm">
+            <span className="text-4xl block mb-3">🚀</span>
+            <h3 className="text-2xl sm:text-4xl font-black text-slate-900 mb-2">Soon to be launched</h3>
+            <p className="text-sm text-stone-500 max-w-md mx-auto mb-5 leading-normal font-medium">
+              We are working hard to bring you the best {selectedCategory.toLowerCase()}. Stay tuned for updates!
+            </p>
+          </div>
+        ) : filteredProducts.length === 0 ? (
           <div className="bg-white border border-stone-200/50 rounded-3xl p-10 sm:p-16 text-center shadow-sm">
             <span className="text-4xl block mb-3">🔍</span>
             <h3 className="text-sm sm:text-base font-black text-slate-900 mb-1">No Solutions Found</h3>

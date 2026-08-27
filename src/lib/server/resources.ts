@@ -13,14 +13,14 @@ export const RESOURCE_NAMES = [
 
 export type ResourceName = (typeof RESOURCE_NAMES)[number];
 
-export type SingletonResourceName = "d2c" | "contact-details";
+export type SingletonResourceName = "d2c" | "contact-details" | "about-company";
 
 export function isResourceName(value: string): value is ResourceName {
   return RESOURCE_NAMES.includes(value as ResourceName);
 }
 
 export function isSingletonResourceName(value: string): value is SingletonResourceName {
-  return value === "d2c" || value === "contact-details";
+  return value === "d2c" || value === "contact-details" || value === "about-company";
 }
 
 export function collectionFor(resource: ResourceName) {

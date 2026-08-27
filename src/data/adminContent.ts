@@ -145,7 +145,7 @@ export interface ContactDetails {
 
 export const CONTACT_DETAILS: ContactDetails = {
   brandName: "GREENGROW FERTILIZER",
-  brandTagline: "D2C Agrochemicals",
+  brandTagline: "",
   brandDescription:
     "India's direct-to-farm crop protectant and bio-stimulant synthesis brand. Delivering certified, lab-tested batches straight from the factory door to your field.",
   logo: "/assets/company_logo.png",
@@ -280,3 +280,26 @@ export const CONTACT_ENQUIRIES: ContactEnquiry[] = [
     status: "Resolved",
   },
 ];
+
+export interface AboutCompany {
+  vision: string;
+  mission: string;
+  directors: { name: string; photo: string; description: string }[];
+}
+
+export const ABOUT_COMPANY: AboutCompany = {
+  vision: "[Vision Statement placeholder: The client will provide the exact content to be inserted here.]",
+  mission: "[Mission Statement placeholder: The client will provide the exact content to be inserted here.]",
+  directors: [
+    {
+      name: "[Director 1 Name]",
+      photo: "",
+      description: "[Placeholder for Director 1 detail. This will be a 15-20 line description provided by the client. It will detail their experience, vision for the company, and background in agriculture or business. The client will send this content and the photograph soon. For now, this is a placeholder text to demonstrate the layout. The text will go on and on, explaining their contributions and leadership approach. This space allows for a comprehensive profile. Once the content is received, it will be updated here.]"
+    },
+    {
+      name: "[Director 2 Name]",
+      photo: "",
+      description: "[Placeholder for Director 2 detail. This will be a 15-20 line description provided by the client. It will detail their experience, vision for the company, and background in agriculture or business. The client will send this content and the photograph soon. For now, this is a placeholder text to demonstrate the layout. The text will go on and on, explaining their contributions and leadership approach. This space allows for a comprehensive profile. Once the content is received, it will be updated here.]"
+    }
+  ]
+};

@@ -44,22 +44,21 @@ export default function Home() {
       const cards = el.querySelectorAll("a");
       if (cards.length === 0) return;
 
-      const cardWidth = cards[0].getBoundingClientRect().width;
-      const gap = 12; // gap-3 is 12px
       const maxScroll = el.scrollWidth - el.clientWidth;
 
       if (el.scrollLeft >= maxScroll - 15) {
         el.scrollTo({ left: 0, behavior: "smooth" });
       } else {
-        el.scrollBy({ left: cardWidth + gap, behavior: "smooth" });
+        // Scroll by the entire visible width of the container at once
+        el.scrollBy({ left: el.clientWidth, behavior: "smooth" });
       }
     }, 3500);
 
     return () => clearInterval(interval);
   }, [products]);
 
-  // Take first 8 products for showcase
-  const featuredProducts = products.slice(0, 8);
+  // Take all products for showcase as requested by client
+  const featuredProducts = products;
   const bestSellers = products.length >= 8 ? products.slice(4, 8) : products.slice(0, 4);
 
   return (
@@ -141,7 +140,7 @@ export default function Home() {
                     <img
                       src={prod.image}
                       alt={prod.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 mix-blend-multiply"
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 mix-blend-multiply p-1 lg:p-2"
                     />
                   </div>
 
@@ -232,7 +231,7 @@ export default function Home() {
                   <img
                     src={prod.image}
                     alt={prod.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 mix-blend-multiply"
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 mix-blend-multiply p-2"
                   />
                 </div>
 

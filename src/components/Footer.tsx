@@ -40,7 +40,9 @@ export default function Footer() {
             />
             <div>
               <span className="text-base font-black tracking-tight text-slate-900 block">{contact?.brandName || "GREENGROW FERTILIZER"}</span>
-              <span className="text-[9px] uppercase tracking-widest text-emerald-650 font-bold block -mt-1">{contact?.brandTagline || "D2C Agrochemicals"}</span>
+            {contact?.brandTagline && (
+              <span className="text-[9px] uppercase tracking-widest text-emerald-650 font-bold block -mt-1">{contact.brandTagline}</span>
+            )}
             </div>
           </Link>
           <p className="text-xs sm:text-sm text-stone-500 leading-relaxed font-medium">

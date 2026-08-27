@@ -43,6 +43,9 @@ export default function ProductDetailPage() {
   );
   const whatsappUrl = `https://wa.me/918269108808?text=${waMsg}`;
 
+  const allBenefits = product.benefits.flatMap(b => b.split(/(?<=\.)\s+/)).filter(Boolean).map(s => s.trim());
+  const usageLines = product.recommendedUsage.split(/(?<=\.)\s+/).filter(Boolean).map(s => s.trim());
+
   return (
     <div className="bg-stone-50/50 min-h-screen py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
@@ -147,14 +150,13 @@ export default function ProductDetailPage() {
                 </p>
               </div>
 
-              {/* Benefits Section */}
               <div>
                 <h4 className="text-[10px] font-black text-stone-400 uppercase tracking-widest mb-2">Key Crop Benefits</h4>
-                <ul className="space-y-2">
-                  {product.benefits.map((benefit, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-xs font-semibold text-stone-600">
+                <ul className="space-y-2.5">
+                  {allBenefits.map((benefit, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5 text-xs font-semibold text-stone-600 bg-white p-3 rounded-xl border border-stone-100 shadow-sm">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                      <span>{benefit}</span>
+                      <span className="leading-relaxed">{benefit}</span>
                     </li>
                   ))}
                 </ul>
@@ -162,10 +164,17 @@ export default function ProductDetailPage() {
 
               {/* Recommended Usage Section */}
               <div className="border-t border-stone-150 pt-5">
-                <h4 className="text-[10px] font-black text-stone-400 uppercase tracking-widest mb-1.5">Recommended Usage & Dosage</h4>
-                <p className="text-xs font-medium text-stone-600 bg-emerald-50/30 border border-emerald-600/10 p-3.5 rounded-xl leading-relaxed">
-                  {product.recommendedUsage}
-                </p>
+                <h4 className="text-[10px] font-black text-stone-400 uppercase tracking-widest mb-2">Recommended Usage & Dosage</h4>
+                <div className="bg-emerald-50/30 border border-emerald-600/10 p-4 rounded-xl">
+                  <ul className="space-y-2.5">
+                    {usageLines.map((line, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-xs font-medium text-stone-600">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 mt-1.5" />
+                        <span className="leading-relaxed">{line}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
 
               {/* Packaging Sizes */}

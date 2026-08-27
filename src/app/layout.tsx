@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import AppChrome from "@/components/AppChrome";
+import SplashScreen from "@/components/SplashScreen";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -33,6 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable} h-full antialiased scroll-smooth`}>
       <body className="min-h-full bg-slate-50 text-slate-900 flex flex-col font-sans">
+        <SplashScreen />
         <AppChrome>{children}</AppChrome>
       </body>
     </html>

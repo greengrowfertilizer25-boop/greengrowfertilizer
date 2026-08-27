@@ -14,7 +14,7 @@ export default function ContactPage() {
     mobileNumber: "",
     emailAddress: "",
     cityState: "",
-    enquiryType: "General Inquiry",
+    enquiryType: "Product Enquiry",
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,7 +39,7 @@ export default function ContactPage() {
         mobileNumber: "",
         emailAddress: "",
         cityState: "",
-        enquiryType: "General Inquiry",
+        enquiryType: "Product Enquiry",
         message: ""
       });
     } catch (error) {
@@ -94,7 +94,7 @@ export default function ContactPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Full Name</label>
+                <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Full Name <span className="text-red-500">*</span></label>
                 <input
                   type="text"
                   name="fullName"
@@ -108,7 +108,7 @@ export default function ContactPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Mobile Number</label>
+                  <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Mobile Number <span className="text-red-500">*</span></label>
                   <input
                     type="tel"
                     name="mobileNumber"
@@ -135,10 +135,11 @@ export default function ContactPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Farm / Company Name</label>
+                  <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Farm / Company Name <span className="text-red-500">*</span></label>
                   <input
                     type="text"
                     name="farmName"
+                    required
                     value={formData.farmName}
                     onChange={handleInputChange}
                     placeholder="Optional"
@@ -153,8 +154,7 @@ export default function ContactPage() {
                     onChange={handleInputChange}
                     className="w-full bg-stone-50 text-slate-800 text-xs p-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:bg-white transition-all font-semibold"
                   >
-                    <option>General Inquiry</option>
-                    <option>Product Dosage Request</option>
+                    <option>Product Enquiry</option>
                     <option>Dealer Partnership</option>
                     <option>Bulk Farm Procurement</option>
                   </select>
@@ -175,7 +175,7 @@ export default function ContactPage() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Message / Requirements</label>
+                <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Message / Requirements <span className="text-red-500">*</span></label>
                 <textarea
                   name="message"
                   required
@@ -283,27 +283,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                  <Users className="w-4.5 h-4.5" />
-                </div>
-                <div>
-                  <span className="block text-[9px] font-black text-stone-400 uppercase tracking-wider">Board of Directors</span>
-                  <div className="text-xs font-bold text-slate-700 mt-0.5 space-y-2">
-                    {contact.directors.map((director) => (
-                      <div key={`${director.name}-${director.role}`}>
-                        <p className="leading-tight">{director.name}</p>
-                        <span className="text-[10px] font-normal text-stone-400 block">{director.role}</span>
-                        {director.phone && (
-                          <a href={`tel:${director.phone.replace(/\s/g, "")}`} className="text-[10px] text-emerald-600 hover:text-emerald-700 font-semibold mt-0.5 block">
-                            {director.phone}
-                          </a>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+
             </div>
           </div>
 

@@ -58,6 +58,14 @@ export async function POST(
     }
 
     const body = await parseJsonBody(request);
+    
+    if (resource === "enquiries") {
+      const { fullName, mobileNumber, farmName, message } = body;
+      if (!fullName || !mobileNumber || !farmName || !message) {
+        return jsonError("Full Name, Mobile Number, Farm / Company Name, and Message are mandatory fields.", 400);
+      }
+    }
+
     const submittedAt = new Date();
     const publicDefaults = isPublicSubmission
       ? {

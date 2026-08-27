@@ -1,12 +1,15 @@
 "use client";
 
-import { Leaf, Award, HeartHandshake } from "lucide-react";
+import { useState } from "react";
+import { Leaf, Award, HeartHandshake, X } from "lucide-react";
 import Link from "next/link";
-import { D2C_SECTION, type D2CSection } from "@/data/adminContent";
+import { D2C_SECTION, type D2CSection, ABOUT_COMPANY, type AboutCompany } from "@/data/adminContent";
 import { useSettings } from "@/lib/client/useSettings";
 
 export default function AboutPage() {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const { data: d2c } = useSettings<D2CSection>("d2c", D2C_SECTION);
+  const { data: about } = useSettings<AboutCompany>("about-company", ABOUT_COMPANY);
   const coreValues = [
     {
       number: "01",
@@ -43,9 +46,21 @@ export default function AboutPage() {
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
             {d2c?.heading || "About Greengrow Fertilizer"}
           </h1>
-          <p className="text-stone-500 text-sm sm:text-base leading-relaxed font-medium">
-            {d2c?.description || "Direct to farm crop protection and bio-stimulant synthesis brand."}
-          </p>
+          
+          <div className="pt-4 space-y-6">
+            <div>
+              <h2 className="text-xl font-bold text-emerald-800 mb-2">Vision Statement</h2>
+              <p className="text-stone-500 text-sm sm:text-base leading-relaxed font-medium whitespace-pre-line">
+                {about?.vision}
+              </p>
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-emerald-800 mb-2">Mission Statement</h2>
+              <p className="text-stone-500 text-sm sm:text-base leading-relaxed font-medium whitespace-pre-line">
+                {about?.mission}
+              </p>
+            </div>
+          </div>
           <div className="flex flex-wrap gap-2 pt-1">
             {(d2c?.bullets || []).map((bullet) => (
               <span key={bullet} className="rounded-full border border-emerald-200 bg-white px-3 py-1 text-[10px] font-black uppercase tracking-wide text-emerald-800">
@@ -56,7 +71,41 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 2. Visual D2C Comparison Timeline */}
+      {/* 2. Directors Details */}
+      <section className="space-y-10 max-w-5xl mx-auto">
+        <div className="text-left space-y-1.5 max-w-xl">
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Board of Directors</h2>
+          <p className="text-stone-400 text-xs sm:text-sm font-semibold">Leadership behind Greengrow Fertilizer.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+          {about?.directors?.map((director, index) => (
+            <div key={index} className="bg-white border border-stone-200/60 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+              <div 
+                className="w-32 h-32 sm:w-40 sm:h-40 bg-stone-200 rounded-full mx-auto mb-4 overflow-hidden border-4 border-emerald-50 cursor-pointer hover:border-emerald-200 transition-colors shadow-sm"
+                onClick={() => director.photo && setSelectedImage(director.photo)}
+              >
+                 {director.photo ? (
+                   <img src={director.photo} alt={director.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                 ) : (
+                   <div className="w-full h-full bg-stone-300 flex items-center justify-center text-stone-500 text-[10px] uppercase font-bold text-center px-2">Photo</div>
+                 )}
+              </div>
+              <h3 className="text-lg font-black text-slate-900 text-center">{director.name}</h3>
+              <p className="text-xs text-stone-500 leading-relaxed font-medium text-justify whitespace-pre-line">
+                {director.description}
+              </p>
+            </div>
+          ))}
+          {(!about?.directors || about.directors.length === 0) && (
+             <div className="col-span-full py-10 text-center text-stone-400 text-sm font-medium">
+               Board of Directors profiles will be updated soon.
+             </div>
+          )}
+        </div>
+      </section>
+
+      {/* 3. Visual D2C Comparison Timeline */}
       <section className="space-y-10 max-w-5xl mx-auto">
         <div className="text-left space-y-1.5 max-w-xl">
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">The Channel Difference</h2>
@@ -181,6 +230,28 @@ export default function AboutPage() {
           </Link>
         </div>
       </section>
+
+      {/* Image Modal for Directors */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-4xl max-h-[85vh] w-full h-full flex flex-col items-center justify-center" onClick={(e) => e.stopPropagation()}>
+            <button 
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-0 right-0 sm:-right-10 sm:-top-10 text-white/70 hover:text-white p-2 bg-slate-900/50 hover:bg-slate-900 rounded-full transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <img 
+              src={selectedImage} 
+              alt="Director Profile" 
+              className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl ring-1 ring-white/10" 
+            />
+          </div>
+        </div>
+      )}
 
     </div>
   );

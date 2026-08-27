@@ -48,7 +48,9 @@ export default function Navbar() {
               />
               <div>
                 <span className="text-sm font-black tracking-tight text-slate-900 block leading-none">{contact?.brandName || "GREENGROW FERTILIZER"}</span>
-                <span className="text-[7px] uppercase tracking-widest text-emerald-650 font-extrabold block mt-0.5">{contact?.brandTagline || "D2C Agrochemicals"}</span>
+              {contact?.brandTagline && (
+                <span className="text-[7px] uppercase tracking-widest text-emerald-650 font-extrabold block mt-0.5">{contact.brandTagline}</span>
+              )}
               </div>
             </Link>
 

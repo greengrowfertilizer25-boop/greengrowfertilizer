@@ -16,6 +16,7 @@ import {
     Leaf,
     LogOut,
     X,
+    Info
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -32,6 +33,7 @@ const navGroups = [
         label: "Homepage Content",
         items: [
             { name: "Hero Slides", href: "/admin/hero", icon: ImageIcon },
+            { name: "About Us", href: "/admin/about", icon: Info },
             { name: "Categories", href: "/admin/categories", icon: Tags },
             { name: "Crops", href: "/admin/crops", icon: Sprout },
             { name: "D2C Section", href: "/admin/d2c", icon: Building2 },
