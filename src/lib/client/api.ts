@@ -7,7 +7,7 @@ export type ApiResource =
   | "dealers"
   | "enquiries";
 
-export type SettingsResource = "d2c" | "contact-details";
+export type SettingsResource = "d2c" | "contact-details" | "about-company";
 
 interface ApiEnvelope<T> {
   data: T;
