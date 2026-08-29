@@ -8,11 +8,11 @@ import { useSettings } from "@/lib/client/useSettings";
 export default function WhatsAppWidget() {
   const pathname = usePathname();
   const { data: contact } = useSettings<ContactDetails>("contact-details", CONTACT_DETAILS);
-  const whatsappNum = (contact?.whatsapp || "918269108808").replace(/\D/g, "");
+  const whatsappNum = (contact?.whatsapp || "").replace(/\D/g, "");
   const message = encodeURIComponent(`Hello ${contact?.brandName || "Greengrow Fertilizer"}! I am interested in your products and would like to receive product catalogues and dealer options.`);
   const whatsappUrl = `https://wa.me/${whatsappNum}?text=${message}`;
 
-  if (pathname === "/") {
+  if (pathname === "/" || !whatsappNum) {
     return null;
   }
 

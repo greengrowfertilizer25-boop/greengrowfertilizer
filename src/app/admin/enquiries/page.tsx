@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Inbox, Mail, Phone, MapPin, MessageSquare, X } from "lucide-react";
+import { Inbox, Mail, Phone, MapPin, MessageSquare, X, Trash2 } from "lucide-react";
 import type { ContactEnquiry } from "@/data/adminContent";
 import { updateResource } from "@/lib/client/api";
 import { useResource } from "@/lib/client/useResource";
@@ -13,7 +13,7 @@ const statusStyles: Record<ContactEnquiry["status"], string> = {
 };
 
 export default function EnquiriesInbox() {
-  const { items, setItems, error } = useResource<ContactEnquiry>("enquiries");
+  const { items, setItems, error, remove: removeItem } = useResource<ContactEnquiry>("enquiries");
   const [selected, setSelected] = useState<ContactEnquiry | null>(null);
   const [filter, setFilter] = useState<"All" | ContactEnquiry["status"]>("All");
 
@@ -32,6 +32,19 @@ export default function EnquiriesInbox() {
     } catch {
       setItems(previousItems);
       setSelected(previousSelected);
+    }
+  };
+
+  const deleteEnquiry = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this enquiry?")) return;
+    try {
+      await removeItem(id);
+      if (selected?.id === id) {
+        setSelected(null);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Failed to delete the enquiry.");
     }
   };
 
@@ -88,9 +101,14 @@ export default function EnquiriesInbox() {
                   <span className={`rounded-lg px-2.5 py-1 text-xs font-bold ${statusStyles[e.status]}`}>{e.status}</span>
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <button onClick={() => setSelected(e)} className="rounded-lg border border-stone-200 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-stone-50">
-                    View
-                  </button>
+                  <div className="flex justify-end gap-2">
+                    <button onClick={() => setSelected(e)} className="rounded-lg border border-stone-200 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-stone-50">
+                      View
+                    </button>
+                    <button onClick={() => deleteEnquiry(e.id)} className="rounded-lg border border-rose-200 px-2.5 py-1.5 text-xs font-bold text-rose-600 hover:bg-rose-50" title="Delete">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -115,9 +133,14 @@ export default function EnquiriesInbox() {
                 <h2 className="font-display text-lg font-extrabold tracking-tight text-slate-900">{selected.fullName}</h2>
                 <p className="text-xs text-slate-500">{selected.id} · {selected.date}</p>
               </div>
-              <button onClick={() => setSelected(null)} className="rounded-xl p-2 text-slate-400 hover:bg-stone-100 hover:text-slate-700">
-                <X className="h-5 w-5" />
-              </button>
+              <div className="flex gap-2">
+                <button onClick={() => deleteEnquiry(selected.id)} className="rounded-xl p-2 text-rose-500 hover:bg-rose-50" title="Delete Enquiry">
+                  <Trash2 className="h-5 w-5" />
+                </button>
+                <button onClick={() => setSelected(null)} className="rounded-xl p-2 text-slate-400 hover:bg-stone-100 hover:text-slate-700">
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
             </div>
             <div className="flex-1 space-y-4 overflow-y-auto px-6 py-5">
               <div className="grid grid-cols-2 gap-4">

@@ -143,7 +143,7 @@ export default function DealerPage() {
               {/* Form Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Full Name</label>
+                  <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Full Name *</label>
                   <input
                     type="text"
                     name="fullName"
@@ -155,7 +155,7 @@ export default function DealerPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Shop / Company Name</label>
+                  <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Shop / Company Name *</label>
                   <input
                     type="text"
                     name="storeName"
@@ -170,7 +170,7 @@ export default function DealerPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Mobile Number</label>
+                  <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Mobile Number *</label>
                   <input
                     type="tel"
                     name="mobileNumber"
@@ -186,7 +186,6 @@ export default function DealerPage() {
                   <input
                     type="email"
                     name="emailAddress"
-                    required
                     value={formData.emailAddress}
                     onChange={handleInputChange}
                     placeholder="e.g. contact@yourstore.com"
@@ -201,7 +200,6 @@ export default function DealerPage() {
                   <input
                     type="text"
                     name="gstin"
-                    required
                     value={formData.gstin}
                     onChange={handleInputChange}
                     placeholder="Registration Number"
@@ -213,7 +211,6 @@ export default function DealerPage() {
                   <input
                     type="text"
                     name="cityState"
-                    required
                     value={formData.cityState}
                     onChange={handleInputChange}
                     placeholder="e.g. Indore, MP"
@@ -224,7 +221,7 @@ export default function DealerPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Target Distribution Area</label>
+                  <label className="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1.5">Target Distribution Area *</label>
                   <input
                     type="text"
                     name="distributionArea"

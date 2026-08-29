@@ -73,7 +73,7 @@ export default function Home() {
               className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
               style={{ backgroundImage: slides[currentSlide]?.image ? `url('${slides[currentSlide].image}')` : "none" }}
             />
-            <div className="absolute inset-0 bg-black/40" />
+            <div className="absolute inset-0 bg-black/20" />
 
             {/* Centered Main Headline at the Top */}
             <div className="absolute top-6 sm:top-10 md:top-12 inset-x-0 mx-auto text-center px-6 max-w-3xl z-10">
@@ -174,7 +174,7 @@ export default function Home() {
           {crops.map((crop) => (
             <Link
               key={crop.id || crop.name}
-              href={`/products?search=${encodeURIComponent(crop.name)}`}
+              href={`/crops/${crop.id}`}
               className="relative rounded-2xl overflow-hidden shadow-sm h-36 w-full flex items-end group cursor-pointer border border-stone-200/50 bg-stone-900"
             >
               {crop.image && (
@@ -188,7 +188,6 @@ export default function Home() {
 
               <div className="relative z-10 p-3.5 space-y-0.5 w-full">
                 <h3 className="text-xs sm:text-sm font-black text-white leading-tight flex items-center gap-1.5">
-                  {crop.icon && <span className="text-sm shrink-0">{crop.icon}</span>}
                   <span className="truncate">{crop.name}</span>
                 </h3>
                 <p className="text-[9px] text-stone-300 font-semibold truncate leading-none">
@@ -337,14 +336,16 @@ export default function Home() {
                 ))}
               </div>
 
-              <div className="pt-0.5">
-                <Link
-                  href="/about"
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-black text-[9px] sm:text-xs uppercase tracking-wider inline-block shadow-md transition-all duration-300"
-                >
-                  {d2c.ctaText || "Learn More"}
-                </Link>
-              </div>
+              {d2c.ctaText && (
+                <div className="pt-0.5">
+                  <Link
+                    href="/about"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-black text-[9px] sm:text-xs uppercase tracking-wider inline-block shadow-md transition-all duration-300"
+                  >
+                    {d2c.ctaText}
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </section>

@@ -124,7 +124,6 @@ export default function ContactPage() {
                   <input
                     type="email"
                     name="emailAddress"
-                    required
                     value={formData.emailAddress}
                     onChange={handleInputChange}
                     placeholder="name@domain.com"
@@ -142,7 +141,7 @@ export default function ContactPage() {
                     required
                     value={formData.farmName}
                     onChange={handleInputChange}
-                    placeholder="Optional"
+                    placeholder="e.g. Greengrow Farms"
                     className="w-full bg-stone-50 text-slate-800 text-xs p-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:bg-white transition-all font-semibold"
                   />
                 </div>
@@ -166,7 +165,6 @@ export default function ContactPage() {
                 <input
                   type="text"
                   name="cityState"
-                  required
                   value={formData.cityState}
                   onChange={handleInputChange}
                   placeholder="e.g. Indore, MP"
@@ -278,19 +276,16 @@ export default function ContactPage() {
                   <p className="text-xs font-bold text-slate-700 mt-0.5">
                     {contact.companyName}<br />
                     <span className="text-[10px] text-stone-400 font-normal block mt-0.5">CIN: {contact.cin}</span>
-                    <span className="text-[10px] text-stone-400 font-normal block">GSTIN: {contact.gstin}</span>
                   </p>
                 </div>
               </div>
-
-
             </div>
           </div>
 
           {/* Interactive Google Map Iframe */}
           <div className="w-full h-[220px] rounded-2xl overflow-hidden border border-stone-200/50 relative shadow-sm">
             <iframe
-              src="https://maps.google.com/maps?q=Radhika%20Premier%20Building%20Indore&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              src="https://maps.google.com/maps?q=22.761262,75.897923&t=&z=15&ie=UTF8&iwloc=&output=embed"
               className="w-full h-full border-0"
               allowFullScreen={true}
               loading="lazy"

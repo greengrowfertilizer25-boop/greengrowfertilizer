@@ -7,6 +7,7 @@ import { Search, Star, RotateCcw } from "lucide-react";
 import type { Product } from "@/data/products";
 import ProductModal from "@/components/ProductModal";
 import { useResource } from "@/lib/client/useResource";
+import type { CategoryItem } from "@/data/adminContent";
 
 function ProductsContent() {
   const searchParams = useSearchParams();
@@ -31,12 +32,20 @@ function ProductsCatalog({
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const { items: products, error } = useResource<Product>("products");
+  const { items: dbCategories } = useResource<CategoryItem>("categories");
 
-  const categories = ["All", "Fertilizers", "Pesticides", "Fungicides", "Herbicides", "Combos"];
+  const sortedCategories = [...dbCategories].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+  const categoryNames = ["All", ...sortedCategories.map(c => c.name)];
+  
+  const currentCategoryObj = sortedCategories.find(c => c.name.toLowerCase() === selectedCategory.toLowerCase());
+  const isComingSoon = currentCategoryObj?.isComingSoon || false;
 
   // Filter logic
   const filteredProducts = products.filter((product) => {
-    const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
+    const isAll = selectedCategory.toLowerCase() === "all";
+    const prodCat = product.category.toLowerCase();
+    const selCat = selectedCategory.toLowerCase();
+    const matchesCategory = isAll || prodCat === selCat || prodCat.startsWith(selCat) || selCat.startsWith(prodCat);
     const matchesSearch =
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -95,8 +104,8 @@ function ProductsCatalog({
 
         {/* Horizontal Category Pill List (Mobile First) */}
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none snap-x snap-mandatory">
-          {categories.map((cat) => {
-            const isActive = selectedCategory === cat;
+          {categoryNames.map((cat) => {
+            const isActive = selectedCategory.toLowerCase() === cat.toLowerCase();
             return (
               <button
                 key={cat}
@@ -121,7 +130,7 @@ function ProductsCatalog({
 
       {/* 3. Product Catalog Grid (2 columns on mobile, 4 columns on desktop) */}
       <main className="w-full">
-        {["Pesticides", "Fungicides", "Herbicides", "Combos"].includes(selectedCategory) ? (
+        {isComingSoon ? (
           <div className="bg-white border border-stone-200/50 rounded-3xl p-10 sm:p-16 text-center shadow-sm">
             <span className="text-4xl block mb-3">🚀</span>
             <h3 className="text-2xl sm:text-4xl font-black text-slate-900 mb-2">Soon to be launched</h3>

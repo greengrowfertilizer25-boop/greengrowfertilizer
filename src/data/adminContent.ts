@@ -42,33 +42,46 @@ export interface CategoryItem {
   count: number;
   desc: string;
   image: string;
+  order?: number;
+  isComingSoon?: boolean;
 }
 
 export const CATEGORY_ITEMS: CategoryItem[] = [
-  { id: "cat-fertilizers", name: "Fertilizers", count: 18, desc: "Organic, NPK Solubles, Micronutrients & Biofertilizers", image: "/assets/hero_2.jpeg" },
-  { id: "cat-pesticides", name: "Pesticides", count: 14, desc: "Chemical Insecticides, Organic Pest Repellers & Bio-Viricides", image: "/assets/product_2.jpeg" },
-  { id: "cat-fungicides", name: "Fungicides", count: 10, desc: "Systemic, Contact and Bio-Fungicides for crop safety", image: "/assets/product_3.jpeg" },
-  { id: "cat-herbicides", name: "Herbicides", count: 6, desc: "Selective and Non-selective Weed Killers", image: "/assets/product_4.jpeg" },
-  { id: "cat-combos", name: "Combos", count: 8, desc: "Super Saver Crop Solutions and stage-specific sprays", image: "/assets/hero_1.jpeg" },
+  { id: "cat-fertilizers", name: "Fertilizers", count: 18, desc: "Organic, NPK Solubles, Micronutrients & Biofertilizers", image: "/assets/hero_2.jpeg", order: 1, isComingSoon: false },
+  { id: "cat-pesticides", name: "Pesticides", count: 0, desc: "Chemical Insecticides, Organic Pest Repellers & Bio-Viricides", image: "/assets/product_2.jpeg", order: 2, isComingSoon: true },
+  { id: "cat-herbicides", name: "Herbicides", count: 0, desc: "Selective and Non-selective Weed Killers", image: "/assets/product_4.jpeg", order: 3, isComingSoon: true },
+  { id: "cat-fungicides", name: "Fungicides", count: 0, desc: "Systemic, Contact and Bio-Fungicides for crop safety", image: "/assets/product_3.jpeg", order: 4, isComingSoon: true },
+  { id: "cat-combos", name: "Combos", count: 8, desc: "Super Saver Crop Solutions and stage-specific sprays", image: "/assets/hero_1.jpeg", order: 5, isComingSoon: false },
 ];
+
+export interface FertilizerSchedule {
+  id: string;
+  productId: string;
+  productName: string;
+  startDay: number;
+  endDay: number;
+  quantity: string;
+  unit: string;
+}
 
 export interface CropItem {
   id: string;
   name: string;
-  icon: string;
   desc: string;
   image: string;
+  schedule?: string;
+  fertilizerSchedules?: FertilizerSchedule[];
 }
 
 export const CROP_ITEMS: CropItem[] = [
-  { id: "crop-tomato", name: "Tomato", icon: "🍅", desc: "Early Blight, Powdery Mildew, Fruit Borer", image: "/assets/hero_1.jpeg" },
-  { id: "crop-cotton", name: "Cotton", icon: "🌱", desc: "Cutworm, Pink Bollworm, Wilt Protection", image: "/assets/hero_2.jpeg" },
-  { id: "crop-paddy", name: "Paddy", icon: "🌾", desc: "Stem Borer, Blast Fungus, Leaf Folder", image: "/assets/hero_3.jpeg" },
-  { id: "crop-chilli", name: "Chilli", icon: "🌶️", desc: "Mites, Whitefly, Leaf Curl Virus", image: "/assets/hero_2.jpeg" },
-  { id: "crop-sugarcane", name: "Sugarcane", icon: "🎋", desc: "Internode Borer, Red Rot prevention", image: "/assets/product_2.jpeg" },
-  { id: "crop-wheat", name: "Wheat", icon: "🌾", desc: "Rust Disease, Termite control, Grain Weight", image: "/assets/product_3.jpeg" },
-  { id: "crop-brinjal", name: "Brinjal", icon: "🍆", desc: "Fruit & Shoot Borer, Jassids", image: "/assets/product_4.jpeg" },
-  { id: "crop-mango", name: "Mango", icon: "🥭", desc: "Powdery Mildew, Fruit Drop, Anthracnose", image: "/assets/hero_1.jpeg" },
+  { id: "crop-tomato", name: "Tomato", desc: "Early Blight, Powdery Mildew, Fruit Borer", image: "/assets/hero_1.jpeg" },
+  { id: "crop-cotton", name: "Cotton", desc: "Cutworm, Pink Bollworm, Wilt Protection", image: "/assets/hero_2.jpeg" },
+  { id: "crop-paddy", name: "Paddy", desc: "Stem Borer, Blast Fungus, Leaf Folder", image: "/assets/hero_3.jpeg" },
+  { id: "crop-chilli", name: "Chilli", desc: "Mites, Whitefly, Leaf Curl Virus", image: "/assets/hero_2.jpeg" },
+  { id: "crop-sugarcane", name: "Sugarcane", desc: "Internode Borer, Red Rot prevention", image: "/assets/product_2.jpeg" },
+  { id: "crop-wheat", name: "Wheat", desc: "Rust Disease, Termite control, Grain Weight", image: "/assets/product_3.jpeg" },
+  { id: "crop-brinjal", name: "Brinjal", desc: "Fruit & Shoot Borer, Jassids", image: "/assets/product_4.jpeg" },
+  { id: "crop-mango", name: "Mango", desc: "Powdery Mildew, Fruit Drop, Anthracnose", image: "/assets/hero_1.jpeg" },
 ];
 
 export interface BlogItem {
@@ -148,9 +161,9 @@ export const CONTACT_DETAILS: ContactDetails = {
   brandTagline: "",
   brandDescription:
     "India's direct-to-farm crop protectant and bio-stimulant synthesis brand. Delivering certified, lab-tested batches straight from the factory door to your field.",
-  logo: "/assets/company_logo.png",
+  logo: "",
   address:
-    "A-103, Radhika Premier Building, 04 Radhika Palace Colony, Bombay Hospital to Tulsi Nagar Main Road, Indore - 452010, Madhya Pradesh, India",
+    "608 Clifton Corporate, Indore",
   phone: "+91 8269108808",
   email: "greengrowfertilizer25@gmail.com",
   officeHours: "Monday - Saturday: 9:00 AM - 6:00 PM (Closed on Sundays & Holidays)",

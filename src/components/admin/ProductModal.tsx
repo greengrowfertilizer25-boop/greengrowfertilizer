@@ -4,6 +4,8 @@ import { useState } from "react";
 import { X, Upload, Save, Trash2 } from "lucide-react";
 
 import { uploadMedia } from "@/lib/client/api";
+import { useResource } from "@/lib/client/useResource";
+import type { CategoryItem } from "@/data/adminContent";
 
 export interface ProductFormData {
     id?: string;
@@ -40,14 +42,6 @@ const emptyForm: ProductFormData = {
     packagingDetails: "",
 };
 
-const categories = [
-    "Fertilizers",
-    "Pesticides",
-    "Fungicides",
-    "Herbicides",
-    "Combos",
-    "Plant Growth Regulators",
-];
 
 interface ProductModalProps {
     open: boolean;
@@ -80,6 +74,8 @@ function ProductModalContent({
 }: Omit<ProductModalProps, "open">) {
     const [form, setForm] = useState<ProductFormData>(() => initialData ?? emptyForm);
     const [uploading, setUploading] = useState(false);
+    const { items: dbCategories } = useResource<CategoryItem>("categories");
+    const categoryNames = dbCategories.sort((a,b) => (a.order ?? 999) - (b.order ?? 999)).map(c => c.name);
 
     const update = <K extends keyof ProductFormData>(
         key: K,
@@ -183,11 +179,11 @@ function ProductModalContent({
                                 onChange={(e) => update("category", e.target.value)}
                                 className={inputCls}
                             >
-                                {categories.map((c) => (
+                                {categoryNames.length > 0 ? categoryNames.map((c) => (
                                     <option key={c} value={c}>
                                         {c}
                                     </option>
-                                ))}
+                                )) : <option value={form.category}>{form.category}</option>}
                             </select>
                         </Field>
 

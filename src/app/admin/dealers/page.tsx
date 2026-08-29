@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Inbox, Mail, Phone, MapPin, Store, FileText, X } from "lucide-react";
+import { Inbox, Mail, Phone, MapPin, Store, FileText, X, Trash2 } from "lucide-react";
 import type { DealerApplication } from "@/data/adminContent";
 import { updateResource } from "@/lib/client/api";
 import { useResource } from "@/lib/client/useResource";
@@ -14,7 +14,7 @@ const statusStyles: Record<DealerApplication["status"], string> = {
 };
 
 export default function DealersInbox() {
-  const { items, setItems, error } = useResource<DealerApplication>("dealers");
+  const { items, setItems, error, remove: removeItem } = useResource<DealerApplication>("dealers");
   const [selected, setSelected] = useState<DealerApplication | null>(null);
   const [filter, setFilter] = useState<"All" | DealerApplication["status"]>("All");
 
@@ -33,6 +33,19 @@ export default function DealersInbox() {
     } catch {
       setItems(previousItems);
       setSelected(previousSelected);
+    }
+  };
+
+  const deleteDealer = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this dealer application?")) return;
+    try {
+      await removeItem(id);
+      if (selected?.id === id) {
+        setSelected(null);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Failed to delete the application.");
     }
   };
 
@@ -92,9 +105,14 @@ export default function DealersInbox() {
                   <span className={`rounded-lg px-2.5 py-1 text-xs font-bold ${statusStyles[d.status]}`}>{d.status}</span>
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <button onClick={() => setSelected(d)} className="rounded-lg border border-stone-200 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-stone-50">
-                    View
-                  </button>
+                  <div className="flex justify-end gap-2">
+                    <button onClick={() => setSelected(d)} className="rounded-lg border border-stone-200 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-stone-50">
+                      View
+                    </button>
+                    <button onClick={() => deleteDealer(d.id)} className="rounded-lg border border-rose-200 px-2.5 py-1.5 text-xs font-bold text-rose-600 hover:bg-rose-50" title="Delete">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -119,9 +137,14 @@ export default function DealersInbox() {
                 <h2 className="font-display text-lg font-extrabold tracking-tight text-slate-900">{selected.fullName}</h2>
                 <p className="text-xs text-slate-500">{selected.id} · {selected.date}</p>
               </div>
-              <button onClick={() => setSelected(null)} className="rounded-xl p-2 text-slate-400 hover:bg-stone-100 hover:text-slate-700">
-                <X className="h-5 w-5" />
-              </button>
+              <div className="flex gap-2">
+                <button onClick={() => deleteDealer(selected.id)} className="rounded-xl p-2 text-rose-500 hover:bg-rose-50" title="Delete Application">
+                  <Trash2 className="h-5 w-5" />
+                </button>
+                <button onClick={() => setSelected(null)} className="rounded-xl p-2 text-slate-400 hover:bg-stone-100 hover:text-slate-700">
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
             </div>
             <div className="flex-1 space-y-4 overflow-y-auto px-6 py-5">
               <div className="grid grid-cols-2 gap-4">

@@ -5,10 +5,13 @@ import { useParams } from "next/navigation";
 import { ArrowLeft, Star, ShoppingBag, ShieldCheck, CheckCircle2, MessageCircle } from "lucide-react";
 import type { Product } from "@/data/products";
 import { useResource } from "@/lib/client/useResource";
+import { CONTACT_DETAILS, type ContactDetails } from "@/data/adminContent";
+import { useSettings } from "@/lib/client/useSettings";
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { items: products, loading } = useResource<Product>("products");
+  const { data: contact } = useSettings<ContactDetails>("contact-details", CONTACT_DETAILS);
   const product = products.find((item) => item.id === id);
 
   if (!product) {
@@ -36,12 +39,14 @@ export default function ProductDetailPage() {
 
   // Generate WhatsApp message link
   const waMsg = encodeURIComponent(
-    `Hello Greengrow Fertilizer! I am interested in purchasing your product: "${product.name}".\n` +
+    `Hello ${contact?.brandName || "Greengrow Fertilizer"}! I am interested in purchasing your product: "${product.name}".\n` +
     `Category: ${product.category}\n` +
     `Price: ₹${product.currentPrice} (Discounted from ₹${product.originalPrice})\n` +
     `Please guide me on how to place the order and check shipping availability.`
   );
-  const whatsappUrl = `https://wa.me/918269108808?text=${waMsg}`;
+  
+  const whatsappNum = (contact?.whatsapp || "").replace(/\D/g, "");
+  const whatsappUrl = whatsappNum ? `https://wa.me/${whatsappNum}?text=${waMsg}` : "";
 
   const allBenefits = product.benefits.flatMap(b => b.split(/(?<=\.)\s+/)).filter(Boolean).map(s => s.trim());
   const usageLines = product.recommendedUsage.split(/(?<=\.)\s+/).filter(Boolean).map(s => s.trim());
@@ -195,16 +200,18 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Checkout CTA Buttons */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 border-t border-stone-150 pt-6">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase tracking-wider py-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md"
-              >
-                <MessageCircle className="w-4.5 h-4.5 fill-current" />
-                Order via WhatsApp
-              </a>
+            <div className={`grid ${whatsappUrl ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'} gap-3.5 border-t border-stone-150 pt-6`}>
+              {whatsappUrl && (
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase tracking-wider py-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md"
+                >
+                  <MessageCircle className="w-4.5 h-4.5 fill-current" />
+                  Order via WhatsApp
+                </a>
+              )}
               <Link
                 href={`/contact?subject=Dealership%20Enquiry%20for%20${encodeURIComponent(product.name)}`}
                 className="bg-slate-900 hover:bg-slate-955 text-white font-black uppercase tracking-wider py-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs"

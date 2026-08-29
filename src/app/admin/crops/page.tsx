@@ -2,19 +2,22 @@
 
 import { useState } from "react";
 import { Plus, Pencil, Trash2 } from "lucide-react";
-import type { CropItem } from "@/data/adminContent";
+import type { CropItem, FertilizerSchedule } from "@/data/adminContent";
 import Modal, { Field, ImageField, SaveFooter, inputCls } from "@/components/admin/Modal";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { useResource } from "@/lib/client/useResource";
+import type { Product } from "@/data/products";
 
 export default function CropsManager() {
     const { items, error, save: saveItem, remove: removeItem } = useResource<CropItem>("crops");
+    const { items: products } = useResource<Product>("products");
     const [open, setOpen] = useState(false);
     const [editing, setEditing] = useState<CropItem | null>(null);
-    const [form, setForm] = useState<CropItem>({ id: "", name: "", icon: "", desc: "", image: "" });
+    const [form, setForm] = useState<CropItem>({ id: "", name: "", desc: "", image: "", fertilizerSchedules: [] });
 
     const openNew = () => {
         setEditing(null);
-        setForm({ id: `crop-${Date.now()}`, name: "", icon: "", desc: "", image: "" });
+        setForm({ id: `crop-${Date.now()}`, name: "", desc: "", image: "", fertilizerSchedules: [] });
         setOpen(true);
     };
     const openEdit = (c: CropItem) => {
@@ -39,6 +42,26 @@ export default function CropsManager() {
         }
     };
 
+    const addSchedule = () => {
+        const newSched = [...(form.fertilizerSchedules || []), { id: `sched-${Date.now()}`, productId: "", productName: "", startDay: 1, endDay: 10, quantity: "", unit: "kg/acre" }];
+        setForm({ ...form, fertilizerSchedules: newSched });
+    };
+
+    const updateSchedule = (index: number, field: keyof FertilizerSchedule, value: string | number) => {
+        const newSched = [...(form.fertilizerSchedules || [])];
+        if (field === 'productId') {
+            const product = products.find(p => p.id === value);
+            newSched[index].productName = product ? product.name : "";
+        }
+        newSched[index] = { ...newSched[index], [field]: value } as FertilizerSchedule;
+        setForm({ ...form, fertilizerSchedules: newSched });
+    };
+
+    const removeSchedule = (index: number) => {
+        const newSched = (form.fertilizerSchedules || []).filter((_, i) => i !== index);
+        setForm({ ...form, fertilizerSchedules: newSched });
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -58,7 +81,6 @@ export default function CropsManager() {
                         <div className="relative h-28 w-full bg-stone-100">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={c.image} alt={c.name} className="h-full w-full object-cover" />
-                            <span className="absolute left-3 top-3 text-2xl">{c.icon}</span>
                         </div>
                         <div className="space-y-1 p-4">
                             <h3 className="font-display text-base font-extrabold tracking-tight text-slate-900">{c.name}</h3>
@@ -87,13 +109,64 @@ export default function CropsManager() {
                     <Field label="Crop Name">
                         <input className={inputCls} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Tomato" />
                     </Field>
-                    <Field label="Icon (emoji)">
-                        <input className={inputCls} value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })} placeholder="🍅" />
-                    </Field>
+                    <ImageField label="Crop Image" value={form.image} onChange={(v) => setForm({ ...form, image: v })} />
                     <Field label="Pest / Disease Description" full>
                         <input className={inputCls} value={form.desc} onChange={(e) => setForm({ ...form, desc: e.target.value })} placeholder="Early Blight, Powdery Mildew, Fruit Borer" />
                     </Field>
-                    <ImageField label="Crop Image" value={form.image} onChange={(v) => setForm({ ...form, image: v })} />
+                    <Field label="Fertigation Schedule" full>
+                        <div className="space-y-4">
+                            {(form.fertilizerSchedules || []).map((sched, idx) => (
+                                <div key={sched.id} className="relative rounded-xl border border-stone-200 bg-stone-50 p-4 pt-8 shadow-sm">
+                                    <button 
+                                      onClick={() => removeSchedule(idx)} 
+                                      className="absolute right-3 top-3 text-rose-500 hover:text-rose-700"
+                                      title="Remove"
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </button>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                                        <div>
+                                            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 block">Product</label>
+                                            <select 
+                                                className={inputCls} 
+                                                value={sched.productId} 
+                                                onChange={(e) => updateSchedule(idx, 'productId', e.target.value)}
+                                            >
+                                                <option value="">-- Select Product --</option>
+                                                {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                                            </select>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <div className="flex-1">
+                                                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 block">Start Day</label>
+                                                <input type="number" className={inputCls} value={sched.startDay} onChange={(e) => updateSchedule(idx, 'startDay', Number(e.target.value))} />
+                                            </div>
+                                            <div className="flex-1">
+                                                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 block">End Day</label>
+                                                <input type="number" className={inputCls} value={sched.endDay} onChange={(e) => updateSchedule(idx, 'endDay', Number(e.target.value))} />
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <div className="flex-1">
+                                                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 block">Qty</label>
+                                                <input type="text" className={inputCls} value={sched.quantity} onChange={(e) => updateSchedule(idx, 'quantity', e.target.value)} placeholder="e.g. 5" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 block">Unit</label>
+                                                <input type="text" className={inputCls} value={sched.unit} onChange={(e) => updateSchedule(idx, 'unit', e.target.value)} placeholder="kg/acre" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            <button onClick={addSchedule} className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-stone-300 py-3 text-sm font-semibold text-stone-600 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors">
+                                <Plus className="h-4 w-4" /> Add Fertilizer Entry
+                            </button>
+                        </div>
+                    </Field>
+                    <Field label="Additional Information" full>
+                        <RichTextEditor value={form.schedule || ""} onChange={(val) => setForm({ ...form, schedule: val })} />
+                    </Field>
                 </div>
             </Modal>
         </div>

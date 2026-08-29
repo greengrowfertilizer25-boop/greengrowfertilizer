@@ -2,15 +2,19 @@
 
 import Link from "next/link";
 import { Phone, Mail, MapPin, ExternalLink } from "lucide-react";
-import { CONTACT_DETAILS, type ContactDetails } from "@/data/adminContent";
+import { CONTACT_DETAILS, CATEGORY_ITEMS, type ContactDetails, type CategoryItem } from "@/data/adminContent";
 import { useSettings } from "@/lib/client/useSettings";
+import { useResource } from "@/lib/client/useResource";
 
 export default function Footer() {
   const { data: contact } = useSettings<ContactDetails>("contact-details", CONTACT_DETAILS);
+  const { items: categories } = useResource<CategoryItem>("categories", CATEGORY_ITEMS);
 
-  const shopByCategories = [
-    "Fertilizers", "Pesticides", "Fungicides", "Herbicides", "Combos"
-  ];
+  const sortedCategories = [...categories].sort((a, b) => {
+    const orderA = a.order ?? 999;
+    const orderB = b.order ?? 999;
+    return orderA - orderB;
+  });
 
   const quickLinks = [
     { name: "About Us", href: "/about" },
@@ -21,8 +25,8 @@ export default function Footer() {
     { name: "Privacy Policy & Terms", href: "/privacy" }
   ];
 
-  const whatsappNumber = contact?.whatsapp || "918269108808";
-  const formattedPhone = contact?.phone || "+91 8269108808";
+  const whatsappNumber = contact?.whatsapp || "";
+  const formattedPhone = contact?.phone || "";
   const cleanPhone = formattedPhone.replace(/\s/g, "");
 
   return (
@@ -33,21 +37,27 @@ export default function Footer() {
         {/* Column 1: Brand Info */}
         <div className="space-y-4 text-left">
           <Link href="/" className="flex items-center gap-2">
-            <img 
-              src={contact?.logo || "/assets/company_logo.png"} 
-              alt={contact?.brandName || "Greengrow Fertilizer Logo"} 
-              className="h-12 sm:h-14 w-auto object-contain shrink-0" 
-            />
-            <div>
-              <span className="text-base font-black tracking-tight text-slate-900 block">{contact?.brandName || "GREENGROW FERTILIZER"}</span>
-            {contact?.brandTagline && (
-              <span className="text-[9px] uppercase tracking-widest text-emerald-650 font-bold block -mt-1">{contact.brandTagline}</span>
+            {contact?.logo && (
+              <img 
+                src={contact.logo} 
+                alt={contact?.brandName || "Company Logo"} 
+                className="h-12 sm:h-14 w-auto object-contain shrink-0" 
+              />
             )}
-            </div>
+            {contact?.brandName && (
+              <div>
+                <span className="text-base font-black tracking-tight text-slate-900 block">{contact.brandName}</span>
+                {contact?.brandTagline && (
+                  <span className="text-[9px] uppercase tracking-widest text-emerald-650 font-bold block -mt-1">{contact.brandTagline}</span>
+                )}
+              </div>
+            )}
           </Link>
-          <p className="text-xs sm:text-sm text-stone-500 leading-relaxed font-medium">
-            {contact?.brandDescription || "India's direct-to-farm crop protectant and bio-stimulant synthesis brand. Delivering certified, lab-tested batches straight from the factory door to your field."}
-          </p>
+          {contact?.brandDescription && (
+            <p className="text-xs sm:text-sm text-stone-500 leading-relaxed font-medium">
+              {contact.brandDescription}
+            </p>
+          )}
           
           {/* Social Links */}
           <div className="flex items-center gap-2.5 pt-1">
@@ -81,11 +91,17 @@ export default function Footer() {
         <div className="space-y-4 text-left">
           <h4 className="text-slate-900 text-xs font-black uppercase tracking-widest">Solutions</h4>
           <ul className="space-y-2.5 text-xs sm:text-sm font-bold">
-            {shopByCategories.map((cat) => (
-              <li key={cat}>
-                <Link href={`/products?category=${cat}`} className="hover:text-emerald-650 transition-colors">
-                  {cat} Solutions
-                </Link>
+            {sortedCategories.map((cat) => (
+              <li key={cat.id}>
+                {cat.isComingSoon ? (
+                  <span className="text-stone-400 cursor-not-allowed flex items-center gap-2">
+                    {cat.name} Solutions <span className="text-[7px] uppercase tracking-wider text-rose-500 bg-rose-50 border border-rose-100 px-1.5 py-0.5 rounded">Coming Soon</span>
+                  </span>
+                ) : (
+                  <Link href={`/products?category=${cat.name}`} className="hover:text-emerald-650 transition-colors">
+                    {cat.name} Solutions
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
@@ -109,24 +125,30 @@ export default function Footer() {
         <div className="space-y-4 text-left">
           <h4 className="text-slate-900 text-xs font-black uppercase tracking-widest">Corporate Office</h4>
           <div className="space-y-3.5 text-xs sm:text-sm font-bold text-stone-500">
-            <div className="flex items-start gap-2.5">
-              <MapPin className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <p className="leading-normal whitespace-pre-line">
-                {contact?.address}
-              </p>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <Phone className="w-4 h-4 text-emerald-600 shrink-0" />
-              <a href={`tel:${cleanPhone}`} className="hover:text-emerald-650 transition-colors">
-                {formattedPhone}
-              </a>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <Mail className="w-4 h-4 text-emerald-600 shrink-0" />
-              <a href={`mailto:${contact?.email}`} className="hover:text-emerald-650 transition-colors">
-                {contact?.email}
-              </a>
-            </div>
+            {contact?.address && (
+              <div className="flex items-start gap-2.5">
+                <MapPin className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <p className="leading-normal whitespace-pre-line">
+                  {contact.address}
+                </p>
+              </div>
+            )}
+            {formattedPhone && (
+              <div className="flex items-center gap-2.5">
+                <Phone className="w-4 h-4 text-emerald-600 shrink-0" />
+                <a href={`tel:${cleanPhone}`} className="hover:text-emerald-650 transition-colors">
+                  {formattedPhone}
+                </a>
+              </div>
+            )}
+            {contact?.email && (
+              <div className="flex items-center gap-2.5">
+                <Mail className="w-4 h-4 text-emerald-600 shrink-0" />
+                <a href={`mailto:${contact.email}`} className="hover:text-emerald-650 transition-colors">
+                  {contact.email}
+                </a>
+              </div>
+            )}
           </div>
         </div>
 
@@ -135,15 +157,21 @@ export default function Footer() {
       {/* 3. Bottom Copyright and links */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 mt-6 border-t border-stone-200/60 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-bold text-stone-500">
         <div className="text-center sm:text-left space-y-1">
-          <p>© {new Date().getFullYear()} {contact?.companyName || "GREENGROW FERTILIZER PRIVATE LIMITED"}. All rights reserved.</p>
-          <p className="text-[10px] text-stone-400 font-normal">CIN: {contact?.cin} | GSTIN: {contact?.gstin}</p>
+          {contact?.companyName && (
+            <p>© {new Date().getFullYear()} {contact.companyName}. All rights reserved.</p>
+          )}
+          {contact?.cin && (
+            <p className="text-[10px] text-stone-400 font-normal">CIN: {contact.cin}</p>
+          )}
         </div>
         <div className="flex gap-5">
           <Link href="/privacy" className="hover:text-stone-700">Privacy Policy</Link>
           <Link href="/privacy" className="hover:text-stone-700">Terms of Service</Link>
-          <a href={`https://wa.me/${whatsappNumber.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="text-emerald-650 hover:text-emerald-700 flex items-center gap-1">
-            WhatsApp Support <ExternalLink className="w-3.5 h-3.5" />
-          </a>
+          {whatsappNumber && (
+            <a href={`https://wa.me/${whatsappNumber.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="text-emerald-650 hover:text-emerald-700 flex items-center gap-1">
+              WhatsApp Support <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          )}
         </div>
       </div>
     </footer>

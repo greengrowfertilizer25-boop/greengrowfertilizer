@@ -43,23 +43,29 @@ export default function AboutPage() {
               {d2c.badge}
             </span>
           )}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-            {d2c?.heading || "About Greengrow Fertilizer"}
-          </h1>
+          {d2c?.heading && (
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+              {d2c.heading}
+            </h1>
+          )}
           
           <div className="pt-4 space-y-6">
-            <div>
-              <h2 className="text-xl font-bold text-emerald-800 mb-2">Vision Statement</h2>
-              <p className="text-stone-500 text-sm sm:text-base leading-relaxed font-medium whitespace-pre-line">
-                {about?.vision}
-              </p>
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-emerald-800 mb-2">Mission Statement</h2>
-              <p className="text-stone-500 text-sm sm:text-base leading-relaxed font-medium whitespace-pre-line">
-                {about?.mission}
-              </p>
-            </div>
+            {about?.vision && (
+              <div>
+                <h2 className="text-xl font-bold text-emerald-800 mb-2">Vision Statement</h2>
+                <p className="text-stone-500 text-sm sm:text-base leading-relaxed font-medium whitespace-pre-line">
+                  {about.vision}
+                </p>
+              </div>
+            )}
+            {about?.mission && (
+              <div>
+                <h2 className="text-xl font-bold text-emerald-800 mb-2">Mission Statement</h2>
+                <p className="text-stone-500 text-sm sm:text-base leading-relaxed font-medium whitespace-pre-line">
+                  {about.mission}
+                </p>
+              </div>
+            )}
           </div>
           <div className="flex flex-wrap gap-2 pt-1">
             {(d2c?.bullets || []).map((bullet) => (

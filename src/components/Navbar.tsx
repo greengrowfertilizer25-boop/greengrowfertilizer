@@ -29,7 +29,8 @@ export default function Navbar() {
     }
   };
 
-  const phoneLink = `tel:${(contact?.phone || "+918269108808").replace(/\s/g, "")}`;
+  const phoneStr = contact?.phone || "";
+  const phoneLink = `tel:${phoneStr.replace(/\s/g, "")}`;
 
   return (
     <>
@@ -41,25 +42,31 @@ export default function Navbar() {
           <div className="flex justify-between items-center w-full md:w-auto">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 group shrink-0">
-              <img 
-                src={contact?.logo || "/assets/company_logo.png"} 
-                alt={contact?.brandName || "Greengrow Fertilizer Logo"} 
-                className="h-8 sm:h-9 w-auto object-contain" 
-              />
-              <div>
-                <span className="text-sm font-black tracking-tight text-slate-900 block leading-none">{contact?.brandName || "GREENGROW FERTILIZER"}</span>
-              {contact?.brandTagline && (
-                <span className="text-[7px] uppercase tracking-widest text-emerald-650 font-extrabold block mt-0.5">{contact.brandTagline}</span>
+              {contact?.logo && (
+                <img 
+                  src={contact.logo} 
+                  alt={contact?.brandName || "Company Logo"} 
+                  className="h-8 sm:h-9 w-auto object-contain" 
+                />
               )}
-              </div>
+              {contact?.brandName && (
+                <div>
+                  <span className="text-sm font-black tracking-tight text-slate-900 block leading-none">{contact.brandName}</span>
+                  {contact?.brandTagline && (
+                    <span className="text-[7px] uppercase tracking-widest text-emerald-650 font-extrabold block mt-0.5">{contact.brandTagline}</span>
+                  )}
+                </div>
+              )}
             </Link>
 
             {/* Mobile Call Icon (Only on mobile top header) */}
-            <div className="flex md:hidden items-center gap-2">
-              <a href={phoneLink} className="p-2 text-emerald-605 bg-emerald-50 rounded-xl transition-colors">
-                <PhoneCall className="w-4 h-4" />
-              </a>
-            </div>
+            {phoneStr && (
+              <div className="flex md:hidden items-center gap-2">
+                <a href={phoneLink} className="p-2 text-emerald-605 bg-emerald-50 rounded-xl transition-colors">
+                  <PhoneCall className="w-4 h-4" />
+                </a>
+              </div>
+            )}
           </div>
 
           {/* Desktop Navigation Links (Only shown on Desktop, thin & centered) */}
@@ -96,13 +103,15 @@ export default function Navbar() {
             </form>
 
             {/* Desktop Action Call Button */}
-            <a
-              href="tel:+918269108808"
-              className="hidden md:inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black uppercase tracking-wider px-4 py-2 rounded-xl transition-all shadow-sm shadow-emerald-700/10 shrink-0"
-            >
-              <PhoneCall className="w-3.5 h-3.5" />
-              <span>Call Advisor</span>
-            </a>
+            {phoneStr && (
+              <a
+                href={phoneLink}
+                className="hidden md:inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black uppercase tracking-wider px-4 py-2 rounded-xl transition-all shadow-sm shadow-emerald-700/10 shrink-0"
+              >
+                <PhoneCall className="w-3.5 h-3.5" />
+                <span>Call Advisor</span>
+              </a>
+            )}
           </div>
 
         </div>
