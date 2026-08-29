@@ -6,7 +6,7 @@ import type { CategoryItem } from "@/data/adminContent";
 import { useResource } from "@/lib/client/useResource";
 
 import { useState } from "react";
-import type { ProductItem } from "@/data/products";
+import type { Product } from "@/data/products";
 import type { CropItem } from "@/data/adminContent";
 
 export default function CategoriesPage() {
@@ -118,7 +118,7 @@ export default function CategoriesPage() {
               const cropData = await cropRes.json();
               const settingsData = await settingsRes.json();
               
-              const products: ProductItem[] = prodData.data || [];
+              const products: Product[] = prodData.data || [];
               const crops: CropItem[] = cropData.data || [];
               const logo = settingsData.data?.logo || "";
 
@@ -146,7 +146,7 @@ export default function CategoriesPage() {
                           <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px;">
                             <div>
                               <strong style="font-size: 11px; color: #475569; text-transform: uppercase;">Price:</strong>
-                              <span style="font-size: 13px; font-weight: 800; color: #0f172a; margin-left: 5px;">${p.price ? '₹' + p.price : 'N/A'}</span>
+                              <span style="font-size: 13px; font-weight: 800; color: #0f172a; margin-left: 5px;">${p.currentPrice ? '₹' + p.currentPrice : 'N/A'}</span>
                             </div>
                             <div>
                               <strong style="font-size: 11px; color: #475569; text-transform: uppercase;">Packaging:</strong>
@@ -154,10 +154,10 @@ export default function CategoriesPage() {
                             </div>
                           </div>
 
-                          ${p.description || p.desc ? `
+                          ${p.description ? `
                             <div>
                               <strong style="font-size: 11px; color: #059669; text-transform: uppercase;">Description:</strong>
-                              <p style="margin: 4px 0 0; font-size: 11px; color: #334155; line-height: 1.5;">${p.description || p.desc}</p>
+                              <p style="margin: 4px 0 0; font-size: 11px; color: #334155; line-height: 1.5;">${p.description}</p>
                             </div>
                           ` : ''}
                           
