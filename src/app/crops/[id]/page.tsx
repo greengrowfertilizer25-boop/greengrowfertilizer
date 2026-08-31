@@ -73,30 +73,37 @@ export default function CropDetailPage() {
                     const matchedProduct = products.find(p => p.id === sched.productId);
                     const prodImage = matchedProduct?.image || null;
                     return (
-                    <div key={sched.id} className="bg-stone-50 border border-stone-100 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div className="flex items-center gap-4">
-                        {prodImage && (
-                          <div className="w-12 h-12 rounded-lg overflow-hidden border border-stone-200 shrink-0 bg-white">
-                            <img src={prodImage} alt={sched.productName} className="w-full h-full object-cover" />
-                          </div>
-                        )}
-                        <div>
-                          <p className="text-xs font-bold text-emerald-700 tracking-wide uppercase mb-1">
-                            Day {sched.startDay} - {sched.endDay}
-                          </p>
-                          {sched.productId ? (
-                            <Link href={`/products/${sched.productId}`} className="text-lg font-black text-slate-900 hover:text-emerald-700 transition-colors">
-                              {sched.productName || "Unknown Product"}
-                            </Link>
-                          ) : (
-                            <p className="text-lg font-black text-slate-900">{sched.productName || "Unknown Product"}</p>
+                    <div key={sched.id} className="bg-stone-50 border border-stone-100 p-4 rounded-xl flex flex-col gap-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          {prodImage && (
+                            <div className="w-12 h-12 rounded-lg overflow-hidden border border-stone-200 shrink-0 bg-white">
+                              <img src={prodImage} alt={sched.productName} className="w-full h-full object-cover" />
+                            </div>
                           )}
+                          <div>
+                            <p className="text-xs font-bold text-emerald-700 tracking-wide uppercase mb-1">
+                              Day {sched.startDay} - {sched.endDay}
+                            </p>
+                            {sched.productId ? (
+                              <Link href={`/products/${sched.productId}`} className="text-lg font-black text-slate-900 hover:text-emerald-700 transition-colors">
+                                {sched.productName || "Unknown Product"}
+                              </Link>
+                            ) : (
+                              <p className="text-lg font-black text-slate-900">{sched.productName || "Unknown Product"}</p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="bg-white border border-stone-200 px-4 py-2 rounded-lg text-sm font-bold text-slate-700 whitespace-nowrap shadow-sm text-center">
+                          <span className="block text-[10px] text-stone-400 uppercase tracking-wide">Dosage</span>
+                          {sched.quantity} {sched.unit}
                         </div>
                       </div>
-                      <div className="bg-white border border-stone-200 px-4 py-2 rounded-lg text-sm font-bold text-slate-700 whitespace-nowrap shadow-sm text-center">
-                        <span className="block text-[10px] text-stone-400 uppercase tracking-wide">Dosage</span>
-                        {sched.quantity} {sched.unit}
-                      </div>
+                      {sched.remark && (
+                        <div className="w-full pt-3 border-t border-stone-200 text-sm text-stone-600 font-medium italic">
+                          <span className="font-bold not-italic text-stone-700">Remark:</span> {sched.remark}
+                        </div>
+                      )}
                     </div>
                   )})}
                 </div>

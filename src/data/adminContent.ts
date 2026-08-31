@@ -62,6 +62,7 @@ export interface FertilizerSchedule {
   endDay: number;
   quantity: string;
   unit: string;
+  remark?: string;
 }
 
 export interface CropItem {

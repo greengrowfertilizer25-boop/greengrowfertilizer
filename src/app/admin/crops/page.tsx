@@ -43,7 +43,7 @@ export default function CropsManager() {
     };
 
     const addSchedule = () => {
-        const newSched = [...(form.fertilizerSchedules || []), { id: `sched-${Date.now()}`, productId: "", productName: "", startDay: 1, endDay: 10, quantity: "", unit: "kg/acre" }];
+        const newSched = [...(form.fertilizerSchedules || []), { id: `sched-${Date.now()}`, productId: "", productName: "", startDay: 1, endDay: 10, quantity: "", unit: "kg/acre", remark: "" }];
         setForm({ ...form, fertilizerSchedules: newSched });
     };
 
@@ -155,6 +155,10 @@ export default function CropsManager() {
                                                 <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 block">Unit</label>
                                                 <input type="text" className={inputCls} value={sched.unit} onChange={(e) => updateSchedule(idx, 'unit', e.target.value)} placeholder="kg/acre" />
                                             </div>
+                                        </div>
+                                        <div className="col-span-1 sm:col-span-2 mt-1">
+                                            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 block">Remark (Optional)</label>
+                                            <input type="text" className={inputCls} value={sched.remark || ""} onChange={(e) => updateSchedule(idx, 'remark', e.target.value)} placeholder="Any special instructions or remarks..." />
                                         </div>
                                     </div>
                                 </div>
