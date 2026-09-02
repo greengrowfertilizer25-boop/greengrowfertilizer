@@ -353,7 +353,7 @@ export default function Home() {
      
 
       {/* 7. Agricultural Blogs - Premium Editorial Grid */}
-      <section className="max-w-7xl mx-auto px-4 space-y-8">
+      <section id="agri-advisor" className="max-w-7xl mx-auto px-4 space-y-8">
         <div className="text-left space-y-1">
           <h2 className="text-base sm:text-2xl font-black text-slate-900">Agri Advisor & News</h2>
           <p className="text-stone-500 text-xs sm:text-sm">Professional advice on crop safety, organic nutrients, and seasonal farming tips.</p>
@@ -362,7 +362,7 @@ export default function Home() {
         <div className="flex gap-4 overflow-x-auto pb-3.5 scrollbar-none snap-x snap-mandatory md:grid md:grid-cols-3 md:gap-8 md:overflow-visible">
           {(() => {
             return blogs.map((blog) => (
-              <article key={blog.id} className="group cursor-pointer flex flex-col justify-between space-y-3.5 shrink-0 w-[240px] sm:w-[300px] md:w-full snap-start">
+              <Link href={`/blogs/${blog.slug || blog.id}`} key={blog.id} className="group cursor-pointer flex flex-col justify-between space-y-3.5 shrink-0 w-[240px] sm:w-[300px] md:w-full snap-start">
                 <div>
                   {/* Blog Aspect Ratio Image Container */}
                   <div className="aspect-[16/10] rounded-2xl overflow-hidden relative bg-stone-100 shadow-sm">
@@ -383,9 +383,7 @@ export default function Home() {
                   <h3 className="text-sm sm:text-base font-black text-slate-900 mt-2 leading-snug line-clamp-2 transition-colors group-hover:text-emerald-750">
                     {blog.title}
                   </h3>
-                  <p className="text-xs text-stone-500 leading-relaxed line-clamp-3 mt-1.5 font-medium">
-                    {blog.desc}
-                  </p>
+                  <div className="text-xs text-stone-500 leading-relaxed line-clamp-3 mt-1.5 font-medium [&>p]:inline" dangerouslySetInnerHTML={{ __html: blog.desc }} />
                 </div>
 
                 <div className="pt-1">
@@ -394,7 +392,7 @@ export default function Home() {
                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </div>
-              </article>
+              </Link>
             ));
           })()}
         </div>

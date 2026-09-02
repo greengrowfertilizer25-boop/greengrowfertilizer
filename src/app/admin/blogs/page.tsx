@@ -4,17 +4,18 @@ import { useState } from "react";
 import { Plus, Pencil, Trash2, Newspaper } from "lucide-react";
 import type { BlogItem } from "@/data/adminContent";
 import Modal, { Field, ImageField, SaveFooter, inputCls } from "@/components/admin/Modal";
+import RichTextField from "@/components/admin/RichTextField";
 import { useResource } from "@/lib/client/useResource";
 
 export default function BlogsManager() {
     const { items, error, save: saveItem, remove: removeItem } = useResource<BlogItem>("blogs");
     const [open, setOpen] = useState(false);
     const [editing, setEditing] = useState<BlogItem | null>(null);
-    const [form, setForm] = useState<BlogItem>({ id: "", title: "", date: "", desc: "", category: "", image: "" });
+    const [form, setForm] = useState<BlogItem>({ id: "", slug: "", title: "", date: "", desc: "", category: "", image: "", metaTitle: "", metaDescription: "" });
 
     const openNew = () => {
         setEditing(null);
-        setForm({ id: `blog-${Date.now()}`, title: "", date: new Date().toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" }), desc: "", category: "", image: "" });
+        setForm({ id: `blog-${Date.now()}`, slug: "", title: "", date: new Date().toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" }), desc: "", category: "", image: "", metaTitle: "", metaDescription: "" });
         setOpen(true);
     };
     const openEdit = (b: BlogItem) => {
@@ -71,7 +72,7 @@ export default function BlogsManager() {
                         <div className="space-y-1.5 p-4">
                             <p className="text-[11px] font-semibold text-slate-400">{b.date}</p>
                             <h3 className="font-display text-sm font-extrabold leading-snug tracking-tight text-slate-900">{b.title}</h3>
-                            <p className="line-clamp-2 text-xs text-slate-500">{b.desc}</p>
+                            <div className="line-clamp-2 text-xs text-slate-500 [&>p]:inline" dangerouslySetInnerHTML={{ __html: b.desc }} />
                             <div className="flex gap-2 pt-2">
                                 <button onClick={() => openEdit(b)} className="inline-flex items-center gap-1.5 rounded-lg border border-stone-200 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-stone-50">
                                     <Pencil className="h-3.5 w-3.5" /> Edit
@@ -102,8 +103,18 @@ export default function BlogsManager() {
                     <Field label="Category">
                         <input className={inputCls} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="D2C Agriculture" />
                     </Field>
-                    <Field label="Description" full>
-                        <textarea rows={4} className={inputCls} value={form.desc} onChange={(e) => setForm({ ...form, desc: e.target.value })} placeholder="Short blog summary shown on the homepage..." />
+                    <RichTextField label="Description" value={form.desc} onChange={(v) => setForm({ ...form, desc: v })} placeholder="Detailed blog content..." />
+                    <div className="col-span-1 sm:col-span-2 pt-2 border-t border-stone-200">
+                        <h4 className="text-sm font-bold text-slate-800 mb-3">SEO Details (Optional)</h4>
+                    </div>
+                    <Field label="URL Slug" full>
+                        <input className={inputCls} value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="my-blog-post-title" />
+                    </Field>
+                    <Field label="Meta Title" full>
+                        <input className={inputCls} value={form.metaTitle || ""} onChange={(e) => setForm({ ...form, metaTitle: e.target.value })} placeholder="SEO Title for search engines" />
+                    </Field>
+                    <Field label="Meta Description" full>
+                        <textarea rows={3} className={inputCls} value={form.metaDescription || ""} onChange={(e) => setForm({ ...form, metaDescription: e.target.value })} placeholder="SEO Description..." />
                     </Field>
                     <ImageField label="Blog Image" value={form.image} onChange={(v) => setForm({ ...form, image: v })} />
                 </div>

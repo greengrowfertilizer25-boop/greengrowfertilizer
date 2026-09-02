@@ -87,37 +87,49 @@ export const CROP_ITEMS: CropItem[] = [
 
 export interface BlogItem {
   id: string;
+  slug: string;
   title: string;
   date: string;
   desc: string;
   category: string;
   image: string;
+  metaTitle?: string;
+  metaDescription?: string;
 }
 
 export const BLOG_ITEMS: BlogItem[] = [
   {
     id: "blog-1",
+    slug: "no-middlemen-no-overpricing-direct-to-farm-revolution",
     title: "No Middlemen, No Overpricing – Direct to Farm Revolution",
     date: "June 16, 2026",
     desc: "Indian farmers are the backbone of our country - but they often face high costs and low-quality products. Read how Greengrow Fertilizer changes this.",
     category: "D2C Agriculture",
     image: "/assets/hero_3.jpeg",
+    metaTitle: "Direct to Farm Revolution - Stop Overpricing",
+    metaDescription: "Learn how Greengrow Fertilizer is changing the Indian agriculture scene with our direct to farm revolution, cutting out middlemen."
   },
   {
     id: "blog-2",
+    slug: "best-soybean-varieties-for-high-yield-2026",
     title: "Best Soybean Varieties for High Yield in 2026",
     date: "May 22, 2026",
     desc: "Success in soybean farming depends heavily on variety selection. Discover the top high-yield soybean varieties designed for this season.",
     category: "Crop Yield Tips",
     image: "/assets/hero_1.jpeg",
+    metaTitle: "Best High Yield Soybean Varieties in 2026",
+    metaDescription: "Discover the top high-yield soybean varieties for the 2026 season. Increase your crop yield with expert tips."
   },
   {
     id: "blog-3",
+    slug: "eliminating-summer-sucking-pests-with-1-single-bio-spray",
     title: "Eliminating Summer Sucking Pests with 1 Single Bio-Spray",
     date: "May 06, 2026",
     desc: "As temperatures soar, whiteflies, thrips, and mites damage major crops. Here is our scientific prevention schedule.",
     category: "Pest Management",
     image: "/assets/product_2.jpeg",
+    metaTitle: "Eliminate Summer Sucking Pests with 1 Bio-Spray",
+    metaDescription: "Protect your crops from whiteflies, thrips, and mites this summer with our single scientific bio-spray solution."
   },
 ];
 
