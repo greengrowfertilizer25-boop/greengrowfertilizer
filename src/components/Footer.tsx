@@ -163,6 +163,9 @@ export default function Footer() {
           {contact?.cin && (
             <p className="text-[10px] text-stone-400 font-normal">CIN: {contact.cin}</p>
           )}
+          <p className="text-[10px] text-stone-400 font-normal pt-0.5">
+            Developed by <a href="https://www.softuitionitsolutions.com/" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-600 hover:underline transition-colors">Softuition IT Solutions</a>
+          </p>
         </div>
         <div className="flex gap-5">
           <Link href="/privacy" className="hover:text-stone-700">Privacy Policy</Link>
