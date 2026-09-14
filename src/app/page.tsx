@@ -136,7 +136,7 @@ export default function Home() {
 
                 <div className="p-2 md:p-2.5 lg:p-3 flex-grow min-h-0 flex flex-col">
                   {/* Visual Packaging Image Container */}
-                  <div className="h-14 sm:h-16 md:h-20 lg:h-24 xl:h-28 rounded-xl bg-stone-50 flex items-center justify-center mb-1.5 lg:mb-2 relative overflow-hidden shrink-0">
+                  <div className="flex-1 rounded-xl bg-stone-50 flex items-center justify-center mb-1.5 lg:mb-2 relative overflow-hidden min-h-0">
                     <img
                       src={prod.image}
                       alt={prod.name}
@@ -150,13 +150,6 @@ export default function Home() {
                       {prod.name}
                     </h3>
                   </div>
-                </div>
-
-                {/* Pricing & CTA panel */}
-                <div className="p-2 md:p-2.5 lg:p-3 pt-0 mt-auto shrink-0">
-                  <span className="block w-full text-center bg-emerald-50 text-emerald-805 border border-emerald-100/50 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-600 py-1.5 rounded-xl text-[9px] lg:text-[10px] font-black transition-all duration-300">
-                    Enquire
-                  </span>
                 </div>
               </Link>
             ))}
